@@ -1,4 +1,4 @@
-package courrent;
+package courrent.countdownlatch;
 
 public class Main {
     public static void main(String[] args) {

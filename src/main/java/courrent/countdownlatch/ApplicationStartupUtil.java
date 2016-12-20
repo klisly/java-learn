@@ -1,4 +1,4 @@
-package courrent;
+package courrent.countdownlatch;
 
 import java.util.ArrayList;
 import java.util.List;

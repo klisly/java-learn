@@ -1,10 +1,10 @@
-package courrent;
+package courrent.countdownlatch;
 
 import java.util.concurrent.CountDownLatch;
 
-public class NetworkHealthChecker extends BaseHealthChecker {
-    public NetworkHealthChecker(CountDownLatch latch) {
-        super("Network Service", latch);
+public class CacheHealthChecker extends BaseHealthChecker {
+    public CacheHealthChecker(CountDownLatch latch) {
+        super("CacheHealthChecker Service", latch);
     }
 
     @Override
