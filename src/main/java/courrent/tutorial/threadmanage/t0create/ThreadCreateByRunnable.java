@@ -1,4 +1,4 @@
-package courrent.tutorial.t0create;
+package courrent.tutorial.threadmanage.t0create;
 
 /**
  * 通过直接继承thread类，然后覆盖run()方法。
