@@ -1,6 +1,6 @@
 Java 7 并发编程指南中文版
 java 7 concurrency book
-
+http://ifeve.com/java-7-concurrency-cookbook/
 原文链接 作者： Javier Fernández González  译者：郑玉婷，许巧辉 校对：方腾飞，欧振聪
 
 申明：本书由并发编程网组织翻译，只供研究和学习之用，禁止任何人用于商业用途。

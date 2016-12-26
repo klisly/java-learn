@@ -125,6 +125,7 @@ public class SortUtil {
      * <li>将另一序列剩下的所有元素直接复制到合并序列尾</li>
      * </ul>
      * O(nlgn)
+     *
      * @param numbers
      */
     public static void mergeSort(int[] numbers, int left, int right, int[] tmp) {
@@ -195,10 +196,10 @@ public class SortUtil {
                 for (j = i; j + gap < length; j += gap) {
                     if (numbers[j] < numbers[j + gap]) {
                         int tmp = numbers[j + gap];
-                        int k = j ;
+                        int k = j;
                         while (k >= 0 && numbers[k] < tmp) {
                             numbers[k + gap] = numbers[k];
-                            if(k >= gap){
+                            if (k >= gap) {
                                 k -= gap;
                             } else {
                                 break;
@@ -211,6 +212,112 @@ public class SortUtil {
         }
     }
 
+    /**
+     * 堆排序是一种树形选择排序方法，它的特点是：在排序的过程中，将array[0，...，n-1]看成是一颗完全二叉树的顺序存储结构，利用完全二叉树中双亲节点和孩子结点之间的内在关系，在当前无序区中选择关键字最大（最小）的元素。
+     * <p>
+     * 1. 若array[0，...，n-1]表示一颗完全二叉树的顺序存储模式，则双亲节点指针和孩子结点指针之间的内在关系如下：
+     * <p>
+     * 　　任意一节点指针 i：父节点：i==0 ? null : (i-1)/2
+     * <p>
+     * 　　　　　　　　　　  左孩子：2*i + 1
+     * <p>
+     * 　　　　　　　　　　  右孩子：2*i + 2
+     * <p>
+     * 2. 堆的定义：n个关键字序列array[0，...，n-1]，当且仅当满足下列要求：(0 <= i <= (n-1)/2)
+     * <p>
+     * 　　　　　　① array[i] <= array[2*i + 1] 且 array[i] <= array[2*i + 2]； 称为小根堆；
+     * <p>
+     * 　　　　　　② array[i] >= array[2*i + 1] 且 array[i] >= array[2*i + 2]； 称为大根堆；
+     * <p>
+     * 3. 建立大根堆：
+     * <p>
+     * 　　n个节点的完全二叉树array[0，...，n-1]，最后一个节点n-1是第(n-1-1)/2个节点的孩子。对第(n-1-1)/2个节点为根的子树调整，使该子树称为堆。
+     * <p>
+     * 　　对于大根堆，调整方法为：若【根节点的关键字】小于【左右子女中关键字较大者】，则交换。
+     * <p>
+     * 　　之后向前依次对各节点（(n-2)/2 - 1）~ 0为根的子树进行调整，看该节点值是否大于其左右子节点的值，若不是，将左右子节点中较大值与之交换，交换后可能会破坏下一级堆，于是继续采用上述方法构建下一级的堆，直到以该节点为根的子树构成堆为止。
+     * <p>
+     * 　　反复利用上述调整堆的方法建堆，直到根节点。
+     * <p>
+     * 4.堆排序：（大根堆）
+     * <p>
+     * 　　①将存放在array[0，...，n-1]中的n个元素建成初始堆；
+     * <p>
+     * 　　②将堆顶元素与堆底元素进行交换，则序列的最大值即已放到正确的位置；
+     * <p>
+     * 　　③但此时堆被破坏，将堆顶元素向下调整使其继续保持大根堆的性质，再重复第②③步，直到堆中仅剩下一个元素为止。
+     * <p>
+     * 堆排序算法的性能分析：
+     * <p>
+     * 　　空间复杂度:o(1)；
+     * <p>
+     * 　　时间复杂度:建堆：o(n)，每次调整o(log n)，故最好、最坏、平均情况下：o(n*logn);
+     * <p>
+     * 　　稳定性：不稳定
+     *
+     * @param arrays
+     */
+    public static void heapSort(int[] arrays) {
+        buildHeap(arrays);//初始建堆，array[0]为第一趟值最大的元素
+        for(int i = arrays.length - 1; i > 1; i--){
+            int temp = arrays[0]; //将堆顶元素和堆低元素交换，即得到当前最大元素正确的排序位置
+            arrays[0] = arrays[i];
+            arrays[i] = temp;
+            adjustDownToUp(arrays, 0, i);
+
+        }
+    }
+
+    public static void buildHeap(int[] arrays) {
+        for (int i = (arrays.length / 2 - 1); i >= 0; i--) {
+            adjustDownToUp(arrays, i, arrays.length);
+        }
+    }
+
+
+    //删除堆顶元素操作
+    public int[] deleteMax(int[] array){
+        //将堆的最后一个元素与堆顶元素交换，堆底元素值设为-99999
+        array[0] = array[array.length-1];
+        array[array.length-1] = -99999;
+        //对此时的根节点进行向下调整
+        adjustDownToUp(array, 0, array.length);
+        return array;
+    }
+
+    //插入操作:向大根堆array中插入数据data
+    public int[] insertData(int[] array, int data){
+        array[array.length-1] = data; //将新节点放在堆的末端
+        int k = array.length-1;  //需要调整的节点
+        int parent = (k-1)/2;    //双亲节点
+        while(parent >=0 && data>array[parent]){
+            array[k] = array[parent];  //双亲节点下调
+            k = parent;
+            if(parent != 0){
+                parent = (parent-1)/2;  //继续向上比较
+            }else{  //根节点已调整完毕，跳出循环
+                break;
+            }
+        }
+        array[k] = data;  //将插入的结点放到正确的位置
+        return array;
+    }
+
+    private static void adjustDownToUp(int[] arrays, int k, int length) {
+        int tmp = arrays[k];
+        for (int i = 2 * k + 1; i < length - 1; i = 2 * i + 1) {
+            if (i < length && arrays[i] < arrays[i + 1]) {
+                i++;
+            }
+            if (tmp >= arrays[i]) {
+                break;
+            } else {
+                arrays[k] = arrays[i];
+                k = i;
+            }
+        }
+        arrays[k] = tmp;
+    }
 
     public static void out(int[] number) {
         System.out.println();

@@ -12,7 +12,7 @@ import java.util.Random;
 public class IntArrayIncrease {
     static int[] rawData = null;
 
-    static int max = 10;
+    static int max = 100;
     static int rawSize = 10;
     private static Random random = new Random();
     private static long begin;
@@ -40,11 +40,14 @@ public class IntArrayIncrease {
 
             begin = System.currentTimeMillis();
 //            SortUtil.out(tmpData);
-            SortUtil.shellSort(tmpData);
+//            SortUtil.shellSort(tmpData);
+            SortUtil.heapSort(tmpData);
 //            SortUtil.quickSort(tmpData, 0, tmpData.length - 1);
 //        Arrays.sort(tmpData);
 //            SortUtil.mergeSort(tmpData, 0, tmpData.length - 1, new int[tmpData.length]);
             boolean resAssert = assertOrder(tmpData);
+//            SortUtil.out(tmpData);
+
             if (!resAssert) {
                 invalidCount++;
                 SortUtil.out(tmpData);
@@ -53,17 +56,17 @@ public class IntArrayIncrease {
         }
 
         log(" total valid cout:"+(totalCount - invalidCount)+" invalid count:"+invalidCount);
-        int num = 1000;       //汽水数量
-        int drinkNum = 0;     //喝掉的汽水数量
-        int emptyNum = 0;    //空瓶子的数量
-        while(num > 0){      //有汽水可以喝
-            drinkNum += num; //喝掉所有的汽水
-            emptyNum += num; //空瓶子数量等于上次剩余的加上这次喝掉的数量
-            num = emptyNum / 3; //兑换的汽水数量
-            emptyNum -= num * 3; //本次兑换剩余的空瓶子数量
-        }
-        System.out.println("总共喝掉瓶数：" + drinkNum);
-        System.out.println("剩余空瓶子数：" + emptyNum);
+//        int num = 1000;       //汽水数量
+//        int drinkNum = 0;     //喝掉的汽水数量
+//        int emptyNum = 0;    //空瓶子的数量
+//        while(num > 0){      //有汽水可以喝
+//            drinkNum += num; //喝掉所有的汽水
+//            emptyNum += num; //空瓶子数量等于上次剩余的加上这次喝掉的数量
+//            num = emptyNum / 3; //兑换的汽水数量
+//            emptyNum -= num * 3; //本次兑换剩余的空瓶子数量
+//        }
+//        System.out.println("总共喝掉瓶数：" + drinkNum);
+//        System.out.println("剩余空瓶子数：" + emptyNum);
     }
 
     private static boolean assertOrder(int[] nums) {
