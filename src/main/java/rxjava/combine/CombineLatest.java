@@ -3,12 +3,10 @@ package rxjava.combine;
 
 import rx.Observable;
 import rx.Subscriber;
-import rx.functions.Func1;
 import rx.functions.Func2;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 //combineLatest操作符把两个Observable产生的结果进行合并，合并的结果组成一个新的Observable。
 // 这两个Observable中任意一个Observable产生的结果，都和另一个Observable最后产生的结果，

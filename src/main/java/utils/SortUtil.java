@@ -1,5 +1,10 @@
 package utils;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
+
 public class SortUtil {
     /**
      * 冒泡法排序<br/>
@@ -258,44 +263,64 @@ public class SortUtil {
      * @param arrays
      */
     public static void heapSort(int[] arrays) {
+        if (arrays == null || arrays.length <= 1) {
+            return;
+        }
         buildHeap(arrays);//初始建堆，array[0]为第一趟值最大的元素
-        for(int i = arrays.length - 1; i > 1; i--){
-            int temp = arrays[0]; //将堆顶元素和堆低元素交换，即得到当前最大元素正确的排序位置
-            arrays[0] = arrays[i];
-            arrays[i] = temp;
-            adjustDownToUp(arrays, 0, i);
+        exchangeElements(arrays, 0, arrays.length - 1);
 
+        for (int i = 1; i < arrays.length - 1; i++) {
+            maxHeap(arrays, 0, arrays.length - i);
+            exchangeElements(arrays, 0, arrays.length - i - 1);
         }
     }
 
     public static void buildHeap(int[] arrays) {
-        for (int i = (arrays.length / 2 - 1); i >= 0; i--) {
-            adjustDownToUp(arrays, i, arrays.length);
+        int half = arrays.length / 2;
+        for (int i = half; i >= 0; i--) {
+            maxHeap(arrays, i, arrays.length);
         }
+    }
+
+    private static void maxHeap(int[] arrays, int index, int length) {
+        int left = 2 * index + 1;
+        int right = 2 * index + 2;
+        int lagest = index;
+        if (left < length && arrays[left] > arrays[lagest]) {
+            lagest = left;
+        }
+        if (right < length && arrays[right] > arrays[lagest]) {
+            lagest = right;
+        }
+        if (index == lagest) {
+            return;
+        }
+        exchangeElements(arrays, lagest, index);
+        maxHeap(arrays, lagest, length);
     }
 
 
     //删除堆顶元素操作
-    public int[] deleteMax(int[] array){
+    public int[] deleteMax(int[] array) {
         //将堆的最后一个元素与堆顶元素交换，堆底元素值设为-99999
-        array[0] = array[array.length-1];
-        array[array.length-1] = -99999;
+        array[0] = array[array.length - 1];
+        array[array.length - 1] = -99999;
         //对此时的根节点进行向下调整
         adjustDownToUp(array, 0, array.length);
         return array;
     }
 
     //插入操作:向大根堆array中插入数据data
-    public int[] insertData(int[] array, int data){
-        array[array.length-1] = data; //将新节点放在堆的末端
-        int k = array.length-1;  //需要调整的节点
-        int parent = (k-1)/2;    //双亲节点
-        while(parent >=0 && data>array[parent]){
+    public int[] insertData(int[] array, int data) {
+        array[array.length - 1] = data; //将新节点放在堆的末端
+        int k = array.length - 1;  //需要调整的节点
+        int parent = (k - 1) / 2;    //双亲节点
+        while (parent >= 0 && data > array[parent]) {
             array[k] = array[parent];  //双亲节点下调
             k = parent;
-            if(parent != 0){
-                parent = (parent-1)/2;  //继续向上比较
-            }else{  //根节点已调整完毕，跳出循环
+            if (parent != 0) {
+                parent = (parent - 1) / 2;  //继续向上比较
+            } else {  //根节点已调整完毕，跳出循环
                 break;
             }
         }
@@ -317,6 +342,140 @@ public class SortUtil {
             }
         }
         arrays[k] = tmp;
+    }
+
+    /**
+     * 计数排序对输入的数据有附加的限制条件：
+     * 1、输入的线性表的元素属于有限偏序集S；
+     * 2、设输入的线性表的长度为n，|S|=k（表示集合S中元素的总数目为k），则k=O(n)。
+     * 在这两个条件下，计数排序的复杂性为O(n)。
+     * 计数排序的基本思想是对于给定的输入序列中的每一个元素x，确定该序列中值小于x的元素的个数
+     * （此处并非比较各元素的大小，而是通过对元素值的计数和计数值的累加来确定）。一旦有了这个信息，
+     * 就可以将x直接存放到最终的输出序列的正确位置上。例如，如果输入序列中只有17个元素的值小于x的值，
+     * 则x可以直接存放在输出序列的第18个位置上。
+     * 计数排序算法没有用到元素间的比较，它利用元素的实际值来确定它们在输出数组中的位置。
+     * 因此，计数排序算法不是一个基于比较的排序算法，从而它的计算时间下界不再是Ω(nlogn)。
+     * 另一方面，计数排序算法之所以能取得线性计算时间的上界是因为对元素的取值范围作了一定限制，
+     * 即k=O(n)。如果k=n2,n3,..，就得不到线性时间的上界。此外，我们还看到，
+     * 由于算法第4行使用了downto语句，经计数排序，输出序列中值相同的元素之间的相对次序
+     * 与他们在输入序列中的相对次序相同，换句话说，计数排序算法是一个稳定的排序算法。
+     *
+     * @param arrays
+     */
+    public static void countSort2(int[] arrays) {
+        if (arrays == null || arrays.length <= 1) {
+            return;
+        }
+        int b[] = new int[arrays.length];
+        int max = arrays[0], min = arrays[0];
+        for (int i : arrays) {
+            if (i > max) {
+                max = i;
+            }
+            if (i < min) {
+                min = i;
+            }
+        }
+        int k = max - min + 1;
+        int c[] = new int[k]; // 缩减空间
+        for (int i = 0; i < arrays.length; i++) {
+            c[arrays[i] - min] += 1;
+        }
+        int nk = 0;
+        for (int i = 0; i < c.length; i++) {
+            while (c[i] > 0) {
+                arrays[nk++] = min + i;
+                c[i] = c[i] - 1;
+            }
+        }
+
+    }
+
+    public static void countSort(int[] array, int range) throws Exception {
+        if (range <= 0) {
+            throw new Exception("range can't be negative or zero.");
+        }
+
+        if (array.length <= 1) {
+            return;
+        }
+
+        int[] countArray = new int[range + 1];
+        for (int i = 0; i < array.length; i++) {
+            int value = array[i];
+            if (value < 0 || value > range) {
+                throw new Exception("array element overflow range.");
+            }
+            countArray[value] += 1;
+        }
+
+        for (int i = 1; i < countArray.length; i++) {
+            countArray[i] += countArray[i - 1];
+        }
+
+        int[] temp = new int[array.length];
+        for (int i = array.length - 1; i >= 0; i--) {
+            int value = array[i];
+            int position = countArray[value] - 1;
+
+            temp[position] = value;
+            countArray[value] -= 1;
+        }
+
+        for (int i = 0; i < array.length; i++) {
+            array[i] = temp[i];
+        }
+    }
+
+    public static void bucketSort(int[] a, int maxValue, int bucketSize) {
+        List<Integer> bucket[] = new ArrayList[bucketSize];
+        for (int i = 0; i < a.length; i++) {
+            int temp = a[i] * bucketSize / maxValue;
+            if (bucket[temp] == null) {
+                bucket[temp] = new ArrayList<Integer>();
+            }
+            bucket[temp].add(a[i]);
+        }
+        // 对各个桶内的list中的元素进行排序
+        for (int j = 0; j < bucketSize; j++) {
+            Collections.sort(bucket[j]);
+        }
+        int k = 0;
+        for (int i = 0; i < bucket.length; i++) {
+            for (Integer data : bucket[i]) {
+                a[k++] = data;
+            }
+        }
+    }
+
+    public static void radixSort(int[] data, int radix, int digits) { //radix表示基数（进制），digits表示最大数值位数
+        LinkedList<LinkedList> queue = new LinkedList<LinkedList>();
+        for (int r = 0; r < radix; r++) {
+            LinkedList<Integer> queue1 = new LinkedList<Integer>();
+            queue.offer(queue1);   //offer用于queue中（Linkedlist同时实现了List和queue接口），add用于List中
+        }
+        //最大元素的位数,进行digits次分配和收集
+        for (int i = 0; i < digits; i++) {
+            //分配数组元素
+            for (int j = 0; j < data.length; j++) {
+                //得到digits的第i+1位
+                int r = (int) (data[j] % Math.pow(radix, i + 1) / Math.pow(radix, i));
+                queue.get(r).offer(data[j]);
+            }
+            //将收集队列元素
+            int count = 0;
+            for (int k = 0; k < radix; k++) {
+                while (queue.get(k).size() > 0) {
+                    data[count++] = (Integer) queue.get(k).poll();
+                }
+            }
+        }
+    }
+
+    public static void exchangeElements(int[] array, int index1, int index2) {
+        int temp = array[index1];
+        array[index1] = array[index2];
+        array[index2] = temp;
     }
 
     public static void out(int[] number) {

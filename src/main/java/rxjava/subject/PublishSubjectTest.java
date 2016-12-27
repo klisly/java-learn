@@ -4,15 +4,10 @@ import rx.Observer;
 import rx.Subscription;
 import rx.subjects.PublishSubject;
 
-import java.util.Random;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.FutureTask;
-
 public class PublishSubjectTest {
     public static void main(String[] args) {
 
-        PublishSubject subject = PublishSubject.create();
+        PublishSubject  subject = PublishSubject.create();
         Subscription subscription = subject.subscribe(new Observer<String>() {
             public void onCompleted() {
                 System.out.println("onCompleted");

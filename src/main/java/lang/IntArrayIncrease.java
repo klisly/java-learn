@@ -12,16 +12,16 @@ import java.util.Random;
 public class IntArrayIncrease {
     static int[] rawData = null;
 
-    static int max = 100;
-    static int rawSize = 10;
+    static int max = 10000;
+    static int rawSize = 100000;
     private static Random random = new Random();
     private static long begin;
     private static int[] nums;
     private static int[] counts;
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
         int invalidCount = 0;
-        int totalCount = 1000;
+        int totalCount = 1;
         for (int i = 0; i < totalCount; i++) {
 //            max = 1 + random.nextInt(21);
 //            rawSize = 1 + random.nextInt(10);
@@ -39,19 +39,23 @@ public class IntArrayIncrease {
 //        log(" bubbleSort cost " + (System.currentTimeMillis() - begin));
 
             begin = System.currentTimeMillis();
-//            SortUtil.out(tmpData);
-//            SortUtil.shellSort(tmpData);
-            SortUtil.heapSort(tmpData);
+            SortUtil.out(tmpData);
+//            SortUtil.bucketSort(tmpData, max, 20);
+            SortUtil.radixSort(tmpData, 10, 4);
+            SortUtil.out(tmpData);
+
 //            SortUtil.quickSort(tmpData, 0, tmpData.length - 1);
 //        Arrays.sort(tmpData);
 //            SortUtil.mergeSort(tmpData, 0, tmpData.length - 1, new int[tmpData.length]);
             boolean resAssert = assertOrder(tmpData);
-//            SortUtil.out(tmpData);
 
             if (!resAssert) {
                 invalidCount++;
                 SortUtil.out(tmpData);
                 log("invalid order");
+            }
+            if(i % 10 == 0){
+                log("round "+ i);
             }
         }
 

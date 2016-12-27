@@ -3,7 +3,6 @@ package rxjava.subject;
 import rx.Observer;
 import rx.Subscription;
 import rx.subjects.BehaviorSubject;
-import rx.subjects.PublishSubject;
 
 public class BehaviorSubjectTest {
     public static void main(String[] args) {
