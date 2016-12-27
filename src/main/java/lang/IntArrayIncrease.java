@@ -12,8 +12,8 @@ import java.util.Random;
 public class IntArrayIncrease {
     static int[] rawData = null;
 
-    static int max = 10000;
-    static int rawSize = 100000;
+    static int max = 1000;
+    static int rawSize = 20;
     private static Random random = new Random();
     private static long begin;
     private static int[] nums;
@@ -41,7 +41,7 @@ public class IntArrayIncrease {
             begin = System.currentTimeMillis();
             SortUtil.out(tmpData);
 //            SortUtil.bucketSort(tmpData, max, 20);
-            SortUtil.radixSort(tmpData, 10, 4);
+            SortUtil.radixSort(tmpData, 10, 3);
             SortUtil.out(tmpData);
 
 //            SortUtil.quickSort(tmpData, 0, tmpData.length - 1);

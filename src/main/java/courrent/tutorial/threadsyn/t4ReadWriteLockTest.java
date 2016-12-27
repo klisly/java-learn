@@ -1,0 +1,117 @@
+package courrent.tutorial.threadsyn;
+
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.locks.ReadWriteLock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
+
+/**
+ * Lock接口以及对象，使用它，很优雅的控制了竞争资源的安全访问，但是这种锁不区分读写，称这种锁为普通锁。
+ * 为了提高性能，Java提供了读写锁，在读的地方使用读锁，在写的地方使用写锁，灵活控制，
+ * 如果没有写锁的情况下，读是无阻塞的,在一定程度上提高了程序的执行效率。
+ Java中读写锁有个接口java.util.concurrent.locks.ReadWriteLock，
+ 也有具体的实现ReentrantReadWriteLock，详细的API可以查看JavaAPI文档。
+ ReentrantReadWriteLock 和 ReentrantLock 不是继承关系，
+ 但都是基于 AbstractQueuedSynchronizer 来实现。
+ lock方法 是基于CAS 来实现的
+ 注意： 在同一线程中，持有读锁后，不能直接调用写锁的lock方法 ，否则会造成死锁。
+
+ ReadWriteLock解决了这个问题，当写操作时，其他线程无法读取或写入数据，而当读操作时，其它线程无法写入数据，但却可以读取数据 。
+
+ lock -> 调用后一直阻塞到获得锁
+ tryLock -> 尝试是否能获得锁 如果不能获得立即返回
+ lockInterruptibly -> 调用后一直阻塞到获得锁 但是接受中断信号(题主用过Thread#sleep吧)
+
+ */
+public class t4ReadWriteLockTest {
+    public static void main(String[] args) {
+        //创建并发访问的账户
+        MyCount myCount = new MyCount("95599200901215522", 10000);
+        //创建一个锁对象
+        ReadWriteLock lock = new ReentrantReadWriteLock(false);
+        //创建一个线程池
+        ExecutorService pool = Executors.newFixedThreadPool(2);
+        //创建一些并发访问用户，一个信用卡，存的存，取的取，好热闹啊
+        User u1 = new User("张三", myCount, -4000, lock, false);
+        User u2 = new User("张三他爹", myCount, 6000, lock, false);
+        User u3 = new User("张三他弟", myCount, -8000, lock, false);
+        User u4 = new User("张三", myCount, 800, lock, false);
+        User u5 = new User("张三他爹", myCount, 0, lock, true);
+        //在线程池中执行各个用户的操作
+        pool.execute(u1);
+        pool.execute(u2);
+        pool.execute(u3);
+        pool.execute(u4);
+        pool.execute(u5);
+        //关闭线程池
+        pool.shutdown();
+    }
+}
+class User implements Runnable {
+    private String name;                 //用户名
+    private MyCount myCount;         //所要操作的账户
+    private int iocash;                 //操作的金额，当然有正负之分了
+    private ReadWriteLock myLock;                 //执行操作所需的锁对象
+    private boolean ischeck;         //是否查询
+
+    User(String name, MyCount myCount, int iocash, ReadWriteLock myLock, boolean ischeck) {
+        this.name = name;
+        this.myCount = myCount;
+        this.iocash = iocash;
+        this.myLock = myLock;
+        this.ischeck = ischeck;
+    }
+
+    public void run() {
+        if (ischeck) {
+            //获取读锁
+            myLock.readLock().lock();
+            System.out.println(Thread.currentThread().getName()+" 读：" + name + "正在查询" + myCount + "账户，当前金额为" + myCount.getCash());
+            //释放读锁
+            myLock.readLock().unlock();
+        } else {
+            //获取写锁
+            myLock.writeLock().lock();
+            //执行现金业务
+            System.out.println(Thread.currentThread().getName()+" before 写：" + name + "正在操作" + myCount + "账户，金额为" + iocash +"，当前金额为" + myCount.getCash());
+            myCount.setCash(myCount.getCash() + iocash);
+            System.out.println(Thread.currentThread().getName()+" after 写：" + name + "操作" + myCount + "账户成功，金额为" + iocash +"，当前金额为" + myCount.getCash());
+            //释放写锁
+            myLock.writeLock().unlock();
+        }
+    }
+}
+
+class MyCount {
+    private String oid;         //账号
+    private int cash;             //账户余额
+
+    MyCount(String oid, int cash) {
+        this.oid = oid;
+        this.cash = cash;
+    }
+
+    public String getOid() {
+        return oid;
+    }
+
+    public void setOid(String oid) {
+        this.oid = oid;
+    }
+
+    public int getCash() {
+        return cash;
+    }
+
+    public void setCash(int cash) {
+        this.cash = cash;
+    }
+
+    @Override
+    public String toString() {
+        return "MyCount{" +
+                "oid='" + oid + '\'' +
+                ", cash=" + cash +
+                '}';
+    }
+}
