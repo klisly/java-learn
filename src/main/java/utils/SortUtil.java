@@ -1,5 +1,7 @@
 package utils;
 
+import sun.security.util.BitArray;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
@@ -467,6 +469,72 @@ public class SortUtil {
             for (int k = 0; k < radix; k++) {
                 while (queue.get(k).size() > 0) {
                     data[count++] = (Integer) queue.get(k).poll();
+                }
+            }
+        }
+    }
+
+    /**
+     简单的说就是用数组存放若有数据就标志为1或true，若不存在标志为0或false。比如1，2，2，5，这里最大值为5，0至5中不存0，3，4，所以：
+     Array[0]=0，Array[1]=1，Array[2]=2，Array[3]=0，Array[4]=0，Array[5]=1
+     上面数中由于2有两个，所以用int存数组的值，不用boolean型，这样如果有多个同样的数字可以用值表示个数。如上面Array[2]=2，就表示2有2个。
+
+     这样排序就方便多了，比如上面开始是{2,5,2,1}这样一无序数组A。找出最大值：5.即用来作位图排序的数组B要申请的大小为5.循环这个数组，把数组A的值用作数组B的下标,如果存在就把值加1，即数组B的值为对应的个数。
+     for (int i : A) {
+     B[i]++;
+     }
+     这样B的值最后同上面的Array一样。把B值大于0的输出就是排好序的了。如上面的数组大于0依次有：1，2，2，5.
+
+     从上面可以看出位图排序至少要注意两点：
+     1、  最大值和最小值之间不能相差太大，否则浪费空间。
+     2、  如果有负数，上面要转换一下，最申请的空间大小为max-min+1，数组B的下标也要作对应的转换，输出前也要转换回去。如int[] arr = { 1, 3, -3, 0, 0};
+     */
+    public static int[] bitSort(int[] arr){
+        int max = arr[0];
+        int min = arr[0];
+        for(int i : arr){
+            if(i < min){
+                min = i;
+            }
+            if(i > max){
+                max = i;
+            }
+        }
+        int count = 0;
+        BitArray newArray =  new BitArray(max - min + 1);
+        for(int i = 0; i < arr.length; i++){
+            if(!newArray.get(arr[i] - min)){
+                newArray.set(arr[i] - min, true);
+                count++;
+            }
+        }
+        int[] res = new int[count];
+        count = 0;
+        for(int i = 0; i < newArray.length(); i++){
+            if(newArray.get(i)){
+                res[count++] = min + i;
+            }
+        }
+        return res;
+    }
+
+    public static void oddEvenSort(int[] arr){
+        int len = arr.length;
+        boolean finish = false;
+        while (!finish){
+            finish = true;
+            for(int i = 0; 2 * i < len; i++){
+                int k = 2 * i;
+                if(k < len -1 && arr[k] > arr[k + 1]){
+                    exchangeElements(arr, k, k + 1);
+                    finish = false;
+                }
+            }
+            for(int i = 0; 2 * i < len; i++){
+                int k = 2 * i + 1;
+                if(k < len -1 && arr[k] > arr[k + 1]){
+                    exchangeElements(arr, k, k + 1);
+                    finish = false;
                 }
             }
         }

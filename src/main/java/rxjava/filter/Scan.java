@@ -5,9 +5,6 @@ import rx.Observable;
 import rx.functions.Action1;
 import rx.functions.Func2;
 
-import java.util.ArrayList;
-import java.util.List;
-
 //累算操作符的使用
 public class Scan {
     public static void main(String[] args) {
@@ -15,6 +12,7 @@ public class Scan {
         observable.scan(new Func2<Integer, Integer, Integer>() {
 
             public Integer call(Integer integer, Integer integer2) {
+                System.out.println("1:"+integer+" 2:"+integer2);
                 return integer * integer2;
             }
         })

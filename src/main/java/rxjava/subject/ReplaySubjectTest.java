@@ -2,7 +2,6 @@ package rxjava.subject;
 
 import rx.Observer;
 import rx.Subscription;
-import rx.subjects.PublishSubject;
 import rx.subjects.ReplaySubject;
 
 public class ReplaySubjectTest {
@@ -22,8 +21,8 @@ public class ReplaySubjectTest {
                 System.out.println("subscription onNext:"+o);
             }
         });
-        subject.onNext("23");
-        subject.onNext("22");
+        subject.onNext("1");
+        subject.onNext("2");
         Subscription subscription2 = subject.subscribe(new Observer<String>() {
             public void onCompleted() {
                 System.out.println("onCompleted");
@@ -37,8 +36,8 @@ public class ReplaySubjectTest {
                 System.out.println("subscription2 onNext:"+o);
             }
         });
-        subject.onNext("222");
-        subject.onNext("2223");
+        subject.onNext("3");
+        subject.onNext("4");
         subject.onCompleted();
     }
 }

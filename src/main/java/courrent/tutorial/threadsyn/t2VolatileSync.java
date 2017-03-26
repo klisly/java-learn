@@ -6,7 +6,7 @@ package courrent.tutorial.threadsyn;
  * c.因此每次使用该域就要重新计算，而不是使用寄存器中的值
  * d.volatile不会提供任何原子操作，它也不能用来修饰final类型的变量
  */
-public class VolatileSync {
+public class t2VolatileSync {
 
     public static void main(String args[]) {
 //        final Bank bank = new Bank();
