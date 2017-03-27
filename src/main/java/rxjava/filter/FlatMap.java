@@ -4,7 +4,9 @@ package rxjava.filter;
 import rx.Observable;
 import rx.functions.Func1;
 
-import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 /**
  FlatMap将一个发射数据的Observable变换为多个Observables，然后将它们发射的数据合并后放进一个单独的Observable
@@ -39,28 +41,40 @@ import java.util.ArrayList;
 public class FlatMap {
     public static void main(String[] args) {
         Observable.just(1,2,3,4,5,6)
+                .map(i -> i * 2)
+                .subscribe(s -> System.out.println(s));
+        Observable.from(Arrays.asList(
+                "http://www.baidu.com/",
+                "http://www.google.com/",
+                "https://www.bing.com/"))
                 .flatMap(i -> Observable.just("num "+i, "num n "+i))
                 .subscribe(s -> System.out.println(s));
 
-        Observable.just(1,2,3,4,5,6)
-                .flatMapIterable(num -> {
-                    ArrayList<Integer> list = new ArrayList<>();
-                    for(int i = 0; i < num; i++){
-                        list.add(i);
-                    }
-                    return list;
-                })
-                .subscribe(s -> System.out.println(s));
-        Observable<Integer> o1 = Observable.just(1,2,3,4,5);
-        Observable<Integer> o2 = Observable.just(5,4,3,2,1);
+//        Observable.just(1,2,3,4,5,6)
+//                .flatMapIterable(num -> {
+//                    ArrayList<Integer> list = new ArrayList<>();
+//                    for(int i = 0; i < num; i++){
+//                        list.add(i);
+//                    }
+//                    return list;
+//                })
+//                .subscribe(s -> System.out.println(s));
+//        Observable<Integer> o1 = Observable.just(1,2,3,4,5);
+//        Observable<Integer> o2 = Observable.just(5,4,3,2,1);
 
         Observable.just(1,2,3,4,5,6)
-                .concatMap(new Func1<Integer, Observable<?>>() {
+                .toList()
+                .concatMap(new Func1<List<Integer>, Observable<?>>() {
                     @Override
-                    public Observable<?> call(Integer integer) {
-                        return Observable.just("concact "+integer * 2);
+                    public Observable<?> call(List<Integer> integers) {
+                        Collections.reverse(integers);
+                        return Observable.just(integers);
                     }
                 })
                 .subscribe(s -> System.out.println(s));
+//        Observable.merge(o1, o2)
+//                .subscribe(s->System.out.println(s));
+//        Observable.concat(o1, o2)
+//                .subscribe(s->System.out.println("concat "+s));
     }
 }
