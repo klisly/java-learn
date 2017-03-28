@@ -7,7 +7,7 @@ public class CyclicBarrierTest {
     static CyclicBarrier c = new CyclicBarrier(2);
 
     public static void main(String[] args) {
-        for(int i = 0; i < 20000; i++){
+        for(int i = 0; i < 100; i++){
             new Thread(new Runnable() {
 
                 @Override

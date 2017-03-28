@@ -41,6 +41,7 @@ public class t5FairLock {
 
         @Override
         public void run() {
+
             System.out.printf("%s: Going to print a document\n", Thread.
                     currentThread().getName());
             printQueue.printJob(new Object());

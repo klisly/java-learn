@@ -18,6 +18,7 @@ public class ExchangerTest {
                 try {
                     String A = "银行流水A";// A录入银行流水数据
                     exgr.exchange(A);
+                    System.out.println("a done!");
                 } catch (InterruptedException e) {
                 }
             }
@@ -28,7 +29,7 @@ public class ExchangerTest {
             public void run() {
                 try {
                     String B = "银行流水A";// B录入银行流水数据
-                    String A = exgr.exchange("B");
+                    String A = exgr.exchange("A");
                     System.out.println("A和B数据是否一致：" + A.equals(B) + ",A录入的是："
                             + A + ",B录入是：" + B);
                 } catch (InterruptedException e) {
