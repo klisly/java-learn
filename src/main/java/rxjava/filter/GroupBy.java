@@ -15,7 +15,6 @@ import rx.observables.GroupedObservable;
  */
 public class GroupBy {
     public static void main(String[] args) {
-
         // groupBy(Func1)：Func1是对数据分组（确定key）
         Observable.just(1, 2, 3, 4, 5, 6, 7, 8, 9)
                 .groupBy(new Func1<Integer, String>() {

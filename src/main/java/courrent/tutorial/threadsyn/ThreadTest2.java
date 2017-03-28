@@ -1,8 +1,5 @@
 package courrent.tutorial.threadsyn;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -70,100 +67,64 @@ import java.util.concurrent.locks.ReentrantLock;
 
 
  */
-public class t6ConditionLock {
-    public static void main(String[] arg){
-        Buffer buffer = new Buffer(30);
-        Producer producer = new Producer(buffer);
-        Consumer consumer = new Consumer(buffer);
-        //创建线程执行生产和消费
-        for(int i=0;i<3;i++){
-            new Thread(producer,"producer-"+i).start();
-        }
-        for(int i=0;i<3;i++){
-            new Thread(consumer,"consumer-"+i).start();
-        }
+
+public class ThreadTest2 {
+    public static void main(String[] args) {
+        final Business business = new Business();
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                threadExecute(business, "sub");
+            }
+        }).start();
+        threadExecute(business, "main");
     }
-
-
-    static class Buffer {
-        private Lock lock;
-        private Condition notFull;
-        private Condition notEmpty;
-        private int maxSize;
-        private List<Date> storage;
-
-        public Buffer(int maxSize) {
-            this.maxSize = maxSize;
-            storage = new ArrayList<Date>();
-            lock = new ReentrantLock();
-            notFull = lock.newCondition();
-            notEmpty = lock.newCondition();
-        }
-
-        public synchronized void put() {
+    public static void threadExecute(Business business, String threadType) {
+        for(int i = 0; i < 1000; i++) {
             try {
-                lock.lock();
-                while (storage.size() == maxSize) {
-                    System.out.println(Thread.currentThread().getName() + " wait to put");
-                    notFull.await();
+                if("main".equals(threadType)) {
+                    business.main(i);
+                } else {
+                    business.sub(i);
                 }
-
-                storage.add(new Date());
-                Thread.sleep(100);
-                notEmpty.signalAll();
-                lock.unlock();
             } catch (InterruptedException e) {
                 e.printStackTrace();
-            }
-        }
-
-        public synchronized void take() {
-            try {
-                lock.lock();
-                while (storage.size() == 0) {
-                    System.out.println(Thread.currentThread().getName() + " wait to take");
-                    notEmpty.await();
-                }
-                storage.remove(0);
-                Thread.sleep(100);
-                notFull.signalAll();
-                lock.unlock();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-    // 生产者
-    static class Producer implements Runnable{
-        private Buffer buffer;
-
-        public Producer(Buffer buffer) {
-            this.buffer = buffer;
-        }
-
-        @Override
-        public void run() {
-            while (true){
-                buffer.put();
-            }
-        }
-    }
-
-    // 生产者
-    static class Consumer implements Runnable{
-        private Buffer buffer;
-
-        public Consumer(Buffer buffer) {
-            this.buffer = buffer;
-        }
-
-        @Override
-        public void run() {
-            while (true){
-                buffer.take();
             }
         }
     }
 }
-
+class Business {
+    private boolean bool = true;
+    private Lock lock = new ReentrantLock();
+    private Condition condition = lock.newCondition();
+    public /*synchronized*/ void main(int loop) throws InterruptedException {
+        lock.lock();
+        try {
+            while(bool) {
+                condition.await();//this.wait();
+            }
+            for(int i = 0; i < 100; i++) {
+                System.out.println("main thread seq of " + i + ", loop of " + loop);
+            }
+            bool = true;
+            condition.signal();//this.notify();
+        } finally {
+            lock.unlock();
+        }
+    }
+    public /*synchronized*/ void sub(int loop) throws InterruptedException {
+        lock.lock();
+        try {
+            while(!bool) {
+                condition.await();//this.wait();
+            }
+            for(int i = 0; i < 10; i++) {
+                System.out.println("sub thread seq of " + i + ", loop of " + loop);
+            }
+            bool = false;
+            condition.signal();//this.notify();
+        } finally {
+            lock.unlock();
+        }
+    }
+}

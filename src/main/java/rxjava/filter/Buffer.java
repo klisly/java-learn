@@ -38,7 +38,7 @@ public class Buffer {
         Observable.just(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
                 .buffer(3)
                 .subscribe(i -> System.out.println( "1buffer-count:" + i));
-//每隔三个数据缓存2个数据
+        //每隔三个数据缓存2个数据
         Observable.just(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
                 .buffer(2, 3)
                 .subscribe(i -> System.out.println( "1buffer-count&skip:" + i));

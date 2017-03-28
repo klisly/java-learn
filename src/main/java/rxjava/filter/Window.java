@@ -33,7 +33,7 @@ public class Window {
                 });
 
         Observable.just(1, 2, 3, 4, 5, 6, 7)
-                .window(3, 2) //每次发射出一个包含三个整数的子Observable
+                .window(3, 2)
                 .subscribe(new Action1<Observable<Integer>>() {
                     @Override
                     public void call(Observable<Integer> integerObservable) {
