@@ -8,7 +8,7 @@ import java.util.List;
 
 public class t6_1SynWait {
     public static void main(String[] arg){
-        Buffer buffer = new Buffer(30);
+        Buffer buffer = new Buffer(6);
         Producer producer = new Producer(buffer);
         Consumer consumer = new Consumer(buffer);
          //创建线程执行生产和消费
@@ -37,8 +37,9 @@ public class t6_1SynWait {
                     System.out.println(Thread.currentThread().getName() + " wait to put");
                     wait();
                 }
+                System.out.println(Thread.currentThread().getName() + " to put");
                 storage.add(new Date());
-                Thread.sleep(100);
+                Thread.sleep(1000);
                 notifyAll();
             } catch (InterruptedException e) {
                 e.printStackTrace();
@@ -52,8 +53,9 @@ public class t6_1SynWait {
                     System.out.println(Thread.currentThread().getName() + " wait to take");
                     wait();
                 }
+                System.out.println(Thread.currentThread().getName() + " to take");
                 storage.remove(0);
-                Thread.sleep(100);
+                Thread.sleep(1000);
                 notifyAll();
             } catch (InterruptedException e) {
                 e.printStackTrace();

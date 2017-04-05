@@ -1,4 +1,4 @@
-package utils;
+package algorithm;
 
 public class FindUtil {
     public static int seqSearch(int[] a, int d) {

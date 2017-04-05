@@ -36,7 +36,7 @@ public class Scan {
             }
         });
 
-//scan将发射种子值3作为自己的第一项数据
+        //scan将发射种子值3作为自己的第一项数据
         Observable.just(1, 2, 3, 4, 5)
                 .scan(2, new Func2<Integer, Integer, Integer>() {
                     @Override

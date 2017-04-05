@@ -1,4 +1,4 @@
-package utils;
+package algorithm;
 
 import java.util.Random;
 
@@ -7,7 +7,7 @@ import java.util.Random;
  * gen cost 26
  * copy gen cost 3
  */
-public class FindTest {
+public class SortTest {
     static int[] rawData = null;
 
     static int max = 10;
@@ -40,10 +40,10 @@ public class FindTest {
             SortUtil.out(tmpData);
 //            SortUtil.bucketSort(tmpData, max, 20);
 //            SortUtil.radixSort(tmpData, 10, 3);
-            tmpData = SortUtil.bitSort(tmpData);
+//            tmpData = SortUtil.bitSort(tmpData);
+            SortUtil.oddEvenSort(tmpData);
+
             SortUtil.out(tmpData);
-            int index = FindUtil.seqSearch(tmpData, tmpData[tmpData.length/2]);
-            FindTest.log(index+"");
 
 //            SortUtil.quickSort(tmpData, 0, tmpData.length - 1);
 //        Arrays.sort(tmpData);

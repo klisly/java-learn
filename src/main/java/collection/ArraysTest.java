@@ -10,6 +10,9 @@ public class ArraysTest {
     public static void main(String[] args){
         // asList 可以返回一个固定大小的List, 初始化list
         List<Integer> nums = Arrays.asList(1,2,5,6,9);
+        nums.sort((o1, o2)->{
+            return o1 - o2;
+        });
         List<String> strs = Arrays.asList("one","two","three");
         List<Double> doubles = Arrays.asList(1.01,1.023);
         // binarySearch 方法支持在整个数组中查找
@@ -60,5 +63,6 @@ public class ArraysTest {
         Arrays.fill(array1, 1);
         //[1, 1, 1, 1, 1, 1, 1, 1]
         System.out.println("fill:"+Arrays.toString(array1));
+
     }
 }

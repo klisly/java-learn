@@ -1,4 +1,4 @@
-package utils;
+package algorithm;
 
 import sun.security.util.BitArray;
 

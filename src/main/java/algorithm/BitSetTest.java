@@ -1,4 +1,4 @@
-package utils;
+package algorithm;
 
 import java.util.BitSet;
 

@@ -1,4 +1,4 @@
-package utils;
+package algorithm;
 
 //去除重复并排序
 

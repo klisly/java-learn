@@ -1,6 +1,6 @@
 package lang;
 
-import utils.SortUtil;
+import algorithm.SortUtil;
 
 import java.util.Random;
 

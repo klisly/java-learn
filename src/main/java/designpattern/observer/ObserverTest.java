@@ -1,11 +1,11 @@
-package designpattern;
+package designpattern.observer;
 
 import java.util.Observable;
 
 /**
  * Created by wizardholy on 2016/12/13.
  */
-public class Observer {
+public class ObserverTest {
     public static void main(String[] args) {
         // Observer后来者居上
         MyObserver observer = new MyObserver("MyObserver1");
