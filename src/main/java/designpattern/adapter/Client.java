@@ -7,5 +7,7 @@ public class Client {
     public static void main(String[] args){
         Adapter adapter = new Adapter();
         adapter.sampleOperator1();
+        ObjectAdapter objectAdapter = new ObjectAdapter(new Adaptee());
+        objectAdapter.sampleOperator1();
     }
 }

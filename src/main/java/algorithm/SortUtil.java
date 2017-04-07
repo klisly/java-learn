@@ -19,14 +19,22 @@ public class SortUtil {
      * @param numbers 需要排序的整型数组
      */
     public static void bubbleSort(int[] numbers) {
-        int temp; // 记录临时中间值
-        int size = numbers.length; // 数组大小
-        for (int i = size - 1; i > 0; --i) {
-            for (int j = 0; j < i; j++) {
+//        int size = numbers.length; // 数组大小
+//        for (int i = size - 1; i > 0; --i) {
+//            for (int j = 0; j < i; j++) {
+//                if (numbers[j] > numbers[j + 1]) { // 交换两数的位置
+//                    temp = numbers[j + 1];
+//                    numbers[j + 1] = numbers[j];
+//                    numbers[j] = temp;
+//                }
+//            }
+//        }
+        for(int i = 0; i < numbers.length; i++){
+            for(int j = 0; j < numbers.length - i - 1; j++){
                 if (numbers[j] > numbers[j + 1]) { // 交换两数的位置
-                    temp = numbers[j + 1];
-                    numbers[j + 1] = numbers[j];
-                    numbers[j] = temp;
+                    numbers[j + 1] = numbers[j] + numbers[j + 1];
+                    numbers[j] = numbers[j + 1] - numbers[j] ;
+                    numbers[j + 1] = numbers[j + 1] - numbers[j] ;
                 }
             }
         }
@@ -47,30 +55,57 @@ public class SortUtil {
      */
     public static void quickSort(int[] numbers, int start, int end) {
         if (start < end) {
-            int base = numbers[start];
-            int l = start;
-            int h = end;
-            do {
-                while (h >= l && numbers[h] > base) {
-                    h--;
+            int index = start;
+            int tmp = numbers[index];
+            int i = start + 1;
+            int j = end;
+            while (i < j){
+                while (numbers[i] < tmp && i < j){
+                    i++;
                 }
-                while (l <= h && numbers[l] < base) {
-                    l++;
+                while (numbers[j] >= tmp && i < j){
+                    j--;
                 }
-                if (l <= h) {
-                    int tmp = numbers[l];
-                    numbers[l] = numbers[h];
-                    numbers[h] = tmp;
-                    l++;
-                    h--;
+                if(i != j){
+                    numbers[j] = numbers[j] + numbers[i];
+                    numbers[i] = numbers[j] - numbers[i];
+                    numbers[j] = numbers[j] - numbers[i];
+                    i++;
+                    j--;
                 }
-            } while (l <= h);
-            if (l < end) {
-                quickSort(numbers, l, end);
             }
-            if (h > start) {
-                quickSort(numbers, start, l - 1);
+            if(numbers[i] <= tmp){
+                numbers[index] = numbers[index] + numbers[i];
+                numbers[i] = numbers[index] - numbers[i];
+                numbers[index] = numbers[index] - numbers[i];
             }
+            quickSort(numbers, start, i-1);
+            quickSort(numbers, i + 1, end);
+
+//            int base = numbers[start];
+//            int l = start;
+//            int h = end;
+//            do {
+//                while (h >= l && numbers[h] > base) {
+//                    h--;
+//                }
+//                while (l <= h && numbers[l] < base) {
+//                    l++;
+//                }
+//                if (l <= h) {
+//                    int tmp = numbers[l];
+//                    numbers[l] = numbers[h];
+//                    numbers[h] = tmp;
+//                    l++;
+//                    h--;
+//                }
+//            } while (l <= h);
+//            if (l < end) {
+//                quickSort(numbers, l, end);
+//            }
+//            if (h > start) {
+//                quickSort(numbers, start, l - 1);
+//            }
         }
     }
 
@@ -84,15 +119,28 @@ public class SortUtil {
      * @param numbers
      */
     public static void selectSort(int[] numbers) {
-        int size = numbers.length, temp;
-        for (int i = 0; i < size; i++) {
-            int k = i;
-            for (int j = size - 1; j > i; j--) {
-                if (numbers[j] < numbers[k]) k = j;
+//        int size = numbers.length, temp;
+//        for (int i = 0; i < size; i++) {
+//            int k = i;
+//            for (int j = size - 1; j > i; j--) {
+//                if (numbers[j] < numbers[k]) k = j;
+//            }
+//            temp = numbers[i];
+//            numbers[i] = numbers[k];
+//            numbers[k] = temp;
+//        }
+        int temp;
+        int size = numbers.length;
+        for(int i = 0; i < size - 1; i++){
+            temp = i;
+            for(int j = i + 1; j < size; j++){
+                if(numbers[j] > numbers[temp]){
+                    temp = j;
+                }
             }
-            temp = numbers[i];
-            numbers[i] = numbers[k];
-            numbers[k] = temp;
+            numbers[temp] = numbers[i] + numbers[temp];
+            numbers[i] = numbers[temp] - numbers[i] ;
+            numbers[temp] = numbers[temp] - numbers[i] ;
         }
     }
 
@@ -113,12 +161,24 @@ public class SortUtil {
         int size = numbers.length;
         int tmp;
         int j;
-        for (int i = 1; i <= size - 1; i++) {
-            tmp = numbers[i];
-            for (j = i; j > 0 && numbers[j - 1] < tmp; j--) {
-                numbers[j] = numbers[j - 1];
+//        for (int i = 1; i <= size - 1; i++) {
+//            tmp = numbers[i];
+//            for (j = i; j > 0 && numbers[j - 1] < tmp; j--) {
+//                numbers[j] = numbers[j - 1];
+//            }
+//            numbers[j] = tmp;
+//        }
+
+        for(int i = 1; i < size; i++){
+            if(numbers[i] < numbers[i-1]){
+                tmp = numbers[i];
+                for(j = i - 1; j >= 0; j--){
+                    if(numbers[j] > tmp){
+                        numbers[j+1] = numbers[j];
+                    }
+                }
+                numbers[j+1] = tmp;
             }
-            numbers[j] = tmp;
         }
     }
 
@@ -136,7 +196,14 @@ public class SortUtil {
      * @param numbers
      */
     public static void mergeSort(int[] numbers, int left, int right, int[] tmp) {
-        if (left < right) {
+//        if (left < right) {
+//            int mid = (left + right) / 2;
+//            mergeSort(numbers, left, mid, tmp);
+//            mergeSort(numbers, mid + 1, right, tmp);
+//            merge(numbers, left, right, mid, tmp);
+//        }
+
+        if(right > left){
             int mid = (left + right) / 2;
             mergeSort(numbers, left, mid, tmp);
             mergeSort(numbers, mid + 1, right, tmp);
@@ -154,32 +221,48 @@ public class SortUtil {
      * @param tmp
      */
     private static void merge(int[] data, int left, int mid, int right, int[] tmp) {
-        int i = left, j = mid + 1;
-        int m = mid, n = right;
-        int k = 0;
-        while (i <= m && j <= n) {
-            if (data[i] < data[j]) {
-                tmp[k++] = data[i++];
-            } else {
-                tmp[k++] = data[j++];
-            }
-        }
+//        int i = left, j = mid + 1;
+//        int m = mid, n = right;
+//        int k = 0;
+//        while (i <= m && j <= n) {
+//            if (data[i] < data[j]) {
+//                tmp[k++] = data[i++];
+//            } else {
+//                tmp[k++] = data[j++];
+//            }
+//        }
+//
+//        while (i <= m) {
+//            tmp[k++] = data[i++];
+//        }
+//
+//        while (j <= m) {
+//            tmp[k++] = data[j++];
+//        }
+//        for (i = 0; i < k; i++) {
+//            data[left + i] = tmp[i];
+//        }
 
-        while (i <= m) {
-            tmp[k++] = data[i++];
+        int index = 0, x = left, y = mid + 1;
+        while (x <= mid && y <= right){
+            tmp[index++] = data[x] > data[y]?data[x++]:data[y++];
         }
-
-        while (j <= m) {
-            tmp[k++] = data[j++];
+        while (x <= mid){
+            tmp[index++] = data[x++];
         }
-        for (i = 0; i < k; i++) {
-            data[left + i] = tmp[i];
+        while (y <= right){
+            tmp[index++] = data[y++];
+        }
+        index = left;
+        while (index <= right){
+            data[index]=tmp[index];
+            index++;
         }
     }
 
     public static void shellSort(int[] numbers) {
-        int length = numbers.length;
-        int i, j, gap;
+//        int length = numbers.length;
+//        int i, j, gap;
 
 //        for (gap = length / 2; gap > 0; gap /= 2) //步长
 //            for (i = 0; i < gap; i++)        //直接插入排序
@@ -198,21 +281,41 @@ public class SortUtil {
 //                    }
 //            }
 
-        for (gap = length / 2; gap > 0; gap /= 2) {
-            for (i = 0; i < gap; i++) {
-                for (j = i; j + gap < length; j += gap) {
-                    if (numbers[j] < numbers[j + gap]) {
-                        int tmp = numbers[j + gap];
-                        int k = j;
-                        while (k >= 0 && numbers[k] < tmp) {
-                            numbers[k + gap] = numbers[k];
-                            if (k >= gap) {
-                                k -= gap;
+//        for (gap = length / 2; gap > 0; gap /= 2) {
+//            for (i = 0; i < gap; i++) {
+//                for (j = i; j + gap < length; j += gap) {
+//                    if (numbers[j] < numbers[j + gap]) {
+//                        int tmp = numbers[j + gap];
+//                        int k = j;
+//                        while (k >= 0 && numbers[k] < tmp) {
+//                            numbers[k + gap] = numbers[k];
+//                            if (k >= gap) {
+//                                k -= gap;
+//                            } else {
+//                                break;
+//                            }
+//                        }
+//                        numbers[k] = tmp;
+//                    }
+//                }
+//            }
+//        }
+        int size = numbers.length, i, j , k;
+        int tmp;
+        int gap = size / 2;
+        for(;gap > 0; gap = gap/2){
+            for(i = 0; i < gap; i++){
+                for (j = i+gap; j < size; j+=gap){
+                    if(numbers[j] < numbers[j - gap]){
+                        tmp = numbers[j];
+                        for(k = j - gap; k >= 0; k -= gap){
+                            if(numbers[k] > tmp){
+                                numbers[k + gap] = numbers[k];
                             } else {
                                 break;
                             }
                         }
-                        numbers[k] = tmp;
+                        numbers[k + gap] = tmp;
                     }
                 }
             }

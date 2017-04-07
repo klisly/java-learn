@@ -15,8 +15,8 @@ public class t1ObjectSyn {
         thread.start();
         thread1.start();
         try {
-            thread.join();
             thread1.join();
+            thread.join();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -42,6 +42,7 @@ class TicketOffice1 implements Runnable {
         cinema.sellTickets2(2);
         cinema.sellTickets2(2);
         cinema.sellTickets2(2);
+        System.out.println("Office1 done");
     }
 }
 
@@ -63,6 +64,7 @@ class TicketOffice2 implements Runnable {
         cinema.sellTickets1(3);
         cinema.sellTickets2(2);
         cinema.sellTickets1(2);
+        System.out.println("Office2 done");
     }
 }
 

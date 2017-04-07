@@ -22,7 +22,7 @@ public class ObjectAdapter implements Target {
     @Override
     public void sampleOperator1() {
         adaptee.sampleOperator();
-        System.out.println(" Adapter sampleOperator1");
+        System.out.println(" ObjectAdapter sampleOperator1");
     }
 
     @Override

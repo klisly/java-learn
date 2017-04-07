@@ -66,7 +66,12 @@ class EventStorage{
         storage.offer(new Date());
         System.out.printf("Set: %d",storage.size());
         System.out.println();
-        notifyAll();
+        notify();
+        try {
+            Thread.sleep(100);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     public synchronized void get(){
@@ -80,6 +85,11 @@ class EventStorage{
         System.out.printf("Get: %d: %s",storage.
                 size(),((LinkedList<?>)storage).poll());
         System.out.println();
-        notifyAll();
+        notify();
+        try {
+            Thread.sleep(100);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 }

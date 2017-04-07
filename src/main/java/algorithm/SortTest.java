@@ -11,7 +11,7 @@ public class SortTest {
     static int[] rawData = null;
 
     static int max = 10;
-    static int rawSize = 20;
+    static int rawSize = 30;
     private static Random random = new Random();
     private static long begin;
     private static int[] nums;
@@ -19,7 +19,7 @@ public class SortTest {
 
     public static void main(String[] args) throws Exception {
         int invalidCount = 0;
-        int totalCount = 1;
+        int totalCount = 3000;
         for (int i = 0; i < totalCount; i++) {
 //            max = 1 + random.nextInt(21);
 //            rawSize = 1 + random.nextInt(10);
@@ -32,10 +32,15 @@ public class SortTest {
 //            log(" copy gen cost " + (System.currentTimeMillis() - begin));
 //            log("src 0:" + rawData[0] + " : " + tmpData[0] + " end:" + rawData[rawData.length - 1] + " : " + tmpData[tmpData.length - 1]);
 
-//        begin = System.currentTimeMillis();
+        begin = System.currentTimeMillis();
 //        SortUtil.bubbleSort(rawData);
-//        log(" bubbleSort cost " + (System.currentTimeMillis() - begin));
+//            SortUtil.selectSort(rawData);
+//            SortUtil.insertSort(rawData);
+//            SortUtil.quickSort(rawData, 0, rawData.length - 1);
+//            SortUtil.shellSort(rawData);
+//            SortUtil.mergeSort(rawData, 0, rawData.length - 1, new int[rawData.length]);
 
+            log(" sort cost " + (System.currentTimeMillis() - begin));
             begin = System.currentTimeMillis();
             SortUtil.out(tmpData);
 //            SortUtil.bucketSort(tmpData, max, 20);
