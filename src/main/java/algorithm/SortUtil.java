@@ -2,10 +2,7 @@ package algorithm;
 
 import sun.security.util.BitArray;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 public class SortUtil {
     /**
@@ -67,17 +64,16 @@ public class SortUtil {
                     j--;
                 }
                 if(i != j){
-                    numbers[j] = numbers[j] + numbers[i];
-                    numbers[i] = numbers[j] - numbers[i];
-                    numbers[j] = numbers[j] - numbers[i];
+                    exchangeElements(numbers, i, j);
                     i++;
                     j--;
                 }
             }
             if(numbers[i] <= tmp){
-                numbers[index] = numbers[index] + numbers[i];
-                numbers[i] = numbers[index] - numbers[i];
-                numbers[index] = numbers[index] - numbers[i];
+                exchangeElements(numbers, i, index);
+            } else {
+                i = i -1;
+                exchangeElements(numbers, i, index);
             }
             quickSort(numbers, start, i-1);
             quickSort(numbers, i + 1, end);
@@ -138,9 +134,11 @@ public class SortUtil {
                     temp = j;
                 }
             }
-            numbers[temp] = numbers[i] + numbers[temp];
-            numbers[i] = numbers[temp] - numbers[i] ;
-            numbers[temp] = numbers[temp] - numbers[i] ;
+            if(i != temp){
+                numbers[temp] = numbers[i] + numbers[temp];
+                numbers[i] = numbers[temp] - numbers[i] ;
+                numbers[temp] = numbers[temp] - numbers[i] ;
+            }
         }
     }
 
@@ -175,6 +173,8 @@ public class SortUtil {
                 for(j = i - 1; j >= 0; j--){
                     if(numbers[j] > tmp){
                         numbers[j+1] = numbers[j];
+                    } else {
+                        break;
                     }
                 }
                 numbers[j+1] = tmp;
@@ -204,7 +204,7 @@ public class SortUtil {
 //        }
 
         if(right > left){
-            int mid = (left + right) / 2;
+            int mid = (left + right ) / 2;
             mergeSort(numbers, left, mid, tmp);
             mergeSort(numbers, mid + 1, right, tmp);
             merge(numbers, left, right, mid, tmp);
@@ -243,7 +243,7 @@ public class SortUtil {
 //            data[left + i] = tmp[i];
 //        }
 
-        int index = 0, x = left, y = mid + 1;
+        int index = left, x = left, y = mid + 1;
         while (x <= mid && y <= right){
             tmp[index++] = data[x] > data[y]?data[x++]:data[y++];
         }
@@ -468,32 +468,51 @@ public class SortUtil {
      * @param arrays
      */
     public static void countSort2(int[] arrays) {
-        if (arrays == null || arrays.length <= 1) {
+//        if (arrays == null || arrays.length <= 1) {
+//            return;
+//        }
+//        int max = arrays[0], min = arrays[0];
+//
+//        for (int i : arrays) {
+//            if (i > max) {
+//                max = i;
+//            }
+//            if (i < min) {
+//                min = i;
+//            }
+//        }
+//
+//        int k = max - min + 1;
+//        int c[] = new int[k]; // 缩减空间
+//        for (int i = 0; i < arrays.length; i++) {
+//            c[arrays[i] - min] += 1;
+//        }
+//        int nk = 0;
+//        for (int i = 0; i < c.length; i++) {
+//            while (c[i] > 0) {
+//                arrays[nk++] = min + i;
+//                c[i] = c[i] - 1;
+//            }
+//        }
+        if(arrays == null || arrays.length <= 1){
             return;
         }
-        int b[] = new int[arrays.length];
-        int max = arrays[0], min = arrays[0];
-        for (int i : arrays) {
-            if (i > max) {
-                max = i;
-            }
-            if (i < min) {
-                min = i;
-            }
+        int min = 0, max = 0, i;
+        for(i = 0; i < arrays.length; i++){
+            min = min > arrays[i] ? arrays[i]:min;
+            max = max < arrays[i] ? arrays[i]:max;
         }
-        int k = max - min + 1;
-        int c[] = new int[k]; // 缩减空间
-        for (int i = 0; i < arrays.length; i++) {
-            c[arrays[i] - min] += 1;
+        int c[] = new int[max - min + 1];
+        for(i = 0; i < arrays.length; i++){
+            c[arrays[i]-min]+=1;
         }
-        int nk = 0;
-        for (int i = 0; i < c.length; i++) {
-            while (c[i] > 0) {
-                arrays[nk++] = min + i;
-                c[i] = c[i] - 1;
+        int k = 0;
+        for(i = 0; i < c.length; i++){
+            while (c[i] > 0){
+                arrays[k++] = i;
+                c[i]-=1;
             }
         }
-
     }
 
     public static void countSort(int[] array, int range) throws Exception {
@@ -533,48 +552,100 @@ public class SortUtil {
     }
 
     public static void bucketSort(int[] a, int maxValue, int bucketSize) {
+//        List<Integer> bucket[] = new ArrayList[bucketSize];
+//        for (int i = 0; i < a.length; i++) {
+//            int temp = a[i] * bucketSize / maxValue;
+//            if (bucket[temp] == null) {
+//                bucket[temp] = new ArrayList<Integer>();
+//            }
+//            bucket[temp].add(a[i]);
+//        }
+//        // 对各个桶内的list中的元素进行排序
+//        for (int j = 0; j < bucketSize; j++) {
+//            Collections.sort (bucket[j]);
+//        }
+//        int k = 0;
+//        for (int i = 0; i < bucket.length; i++) {
+//            for (Integer data : bucket[i]) {
+//                a[k++] = data;
+//            }
+//        }
+
         List<Integer> bucket[] = new ArrayList[bucketSize];
-        for (int i = 0; i < a.length; i++) {
-            int temp = a[i] * bucketSize / maxValue;
-            if (bucket[temp] == null) {
-                bucket[temp] = new ArrayList<Integer>();
+        for(int i = 0; i < a.length; i++){
+            int temp = a[i]*bucketSize / maxValue;
+            if(bucket[temp] == null){
+                bucket[temp] = new ArrayList<>();
             }
             bucket[temp].add(a[i]);
         }
-        // 对各个桶内的list中的元素进行排序
-        for (int j = 0; j < bucketSize; j++) {
-            Collections.sort(bucket[j]);
-        }
-        int k = 0;
-        for (int i = 0; i < bucket.length; i++) {
-            for (Integer data : bucket[i]) {
-                a[k++] = data;
+        for(int i = 0; i < bucketSize; i++){
+            if(bucket[i] != null){
+                Collections.sort(bucket[i]);
             }
+        }
+
+        int k = 0;
+        for(int i = 0; i < bucketSize; i++){
+            if( bucket[i] != null){
+                for(Integer integer : bucket[i]){
+                    a[k++] = integer;
+                }
+            }
+
         }
     }
 
+    /**
+     * 基数排序
+     基数排序（以整形为例），将整形10进制按每位拆分，然后从低位到高位依次比较各个位。主要分为两个过程：
+     (1)分配，先从个位开始，根据位值(0-9)分别放到0~9号桶中（比如53,个位为3，则放入3号桶中）
+     (2)收集，再将放置在0~9号桶中的数据按顺序放到数组中
+     重复(1)(2)过程，从个位到最高位（比如32位无符号整形最大数4294967296，最高位10位）
+     * @param data 数组
+     * @param radix 进制
+     * @param digits 位数
+     */
     public static void radixSort(int[] data, int radix, int digits) { //radix表示基数（进制），digits表示最大数值位数
-        LinkedList<LinkedList> queue = new LinkedList<LinkedList>();
-        for (int r = 0; r < radix; r++) {
-            LinkedList<Integer> queue1 = new LinkedList<Integer>();
-            queue.offer(queue1);   //offer用于queue中（Linkedlist同时实现了List和queue接口），add用于List中
-        }
-        //最大元素的位数,进行digits次分配和收集
-        for (int i = 0; i < digits; i++) {
-            //分配数组元素
-            for (int j = 0; j < data.length; j++) {
-                //得到digits的第i+1位
-                int r = (int) (data[j] % Math.pow(radix, i + 1) / Math.pow(radix, i));
-                queue.get(r).offer(data[j]);
+//        LinkedList<LinkedList> queue = new LinkedList<LinkedList>();
+//        for (int r = 0; r < radix; r++) {
+//            LinkedList<Integer> queue1 = new LinkedList<Integer>();
+//            queue.offer(queue1);   //offer用于queue中（Linkedlist同时实现了List和queue接口），add用于List中
+//        }
+//        //最大元素的位数,进行digits次分配和收集
+//        for (int i = 0; i < digits; i++) {
+//            //分配数组元素
+//            for (int j = 0; j < data.length; j++) {
+//                //得到digits的第i+1位
+//                int r = (int) (data[j] % Math.pow(radix, i + 1) / Math.pow(radix, i));
+//                queue.get(r).offer(data[j]);
+//            }
+//            //将收集队列元素
+//            int count = 0;
+//            for (int k = 0; k < radix; k++) {
+//                while (queue.get(k).size() > 0) {
+//                    data[count++] = (Integer) queue.get(k).poll();
+//                }
+//            }
+//        }
+        LinkedList<Integer> rs[] = new LinkedList[radix];
+        for(int i = 0; i < digits; i++){
+            for(int j = 0 ; j < data.length; j++){
+                int r = (int)(data[j] % Math.pow(radix, i+1) / Math.pow(radix, i)); // 获取该位上的数值
+                if(rs[r] == null){
+                    rs[r] = new LinkedList<>();
+                }
+                rs[r].offer(data[j]);
             }
-            //将收集队列元素
-            int count = 0;
-            for (int k = 0; k < radix; k++) {
-                while (queue.get(k).size() > 0) {
-                    data[count++] = (Integer) queue.get(k).poll();
+            int k = 0;
+
+            for(int l = radix - 1; l >= 0 ; l--){
+                while (rs[l] != null && !rs[l].isEmpty()){
+                    data[k++] = rs[l].poll();
                 }
             }
         }
+
     }
 
     /**

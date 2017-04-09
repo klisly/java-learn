@@ -13,7 +13,9 @@ public class CyclicBarrierTest {
                 @Override
                 public void run() {
                     try {
+                        System.out.println("sub thread");
                         c.await();
+                        System.out.println("sub thread run");
                     } catch (Exception e) {
 
                     }
@@ -22,7 +24,9 @@ public class CyclicBarrierTest {
             }).start();
 
             try {
+                System.out.println("main thread");
                 c.await();
+                System.out.println("main thread run");
             } catch (Exception e) {
 
             }

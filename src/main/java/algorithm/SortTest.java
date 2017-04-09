@@ -10,8 +10,8 @@ import java.util.Random;
 public class SortTest {
     static int[] rawData = null;
 
-    static int max = 10;
-    static int rawSize = 30;
+    static int max = 200;
+    static int rawSize = 1000;
     private static Random random = new Random();
     private static long begin;
     private static int[] nums;
@@ -19,7 +19,7 @@ public class SortTest {
 
     public static void main(String[] args) throws Exception {
         int invalidCount = 0;
-        int totalCount = 3000;
+        int totalCount = 1000;
         for (int i = 0; i < totalCount; i++) {
 //            max = 1 + random.nextInt(21);
 //            rawSize = 1 + random.nextInt(10);
@@ -33,27 +33,29 @@ public class SortTest {
 //            log("src 0:" + rawData[0] + " : " + tmpData[0] + " end:" + rawData[rawData.length - 1] + " : " + tmpData[tmpData.length - 1]);
 
         begin = System.currentTimeMillis();
-//        SortUtil.bubbleSort(rawData);
+            log("origin:");
+            SortUtil.out(rawData);
+
+//            SortUtil.bubbleSort(rawData);
 //            SortUtil.selectSort(rawData);
 //            SortUtil.insertSort(rawData);
 //            SortUtil.quickSort(rawData, 0, rawData.length - 1);
 //            SortUtil.shellSort(rawData);
-//            SortUtil.mergeSort(rawData, 0, rawData.length - 1, new int[rawData.length]);
-
-            log(" sort cost " + (System.currentTimeMillis() - begin));
-            begin = System.currentTimeMillis();
-            SortUtil.out(tmpData);
-//            SortUtil.bucketSort(tmpData, max, 20);
-//            SortUtil.radixSort(tmpData, 10, 3);
+//            SortUtil.mergeSort(rawData, 0, rawData.length-1, new int[rawData.length]);
+//            SortUtil.bucketSort(rawData, max, 20);
+//            SortUtil.radixSort(rawData, 10, 6);
+//            SortUtil.radixSort(rawData, 10, 4);
+                SortUtil.countSort2(rawData);
 //            tmpData = SortUtil.bitSort(tmpData);
-            SortUtil.oddEvenSort(tmpData);
-
-            SortUtil.out(tmpData);
+//            SortUtil.oddEvenSort(tmpData);
+            log("sort:");
+            SortUtil.out(rawData);
+            log(" sort cost " + (System.currentTimeMillis() - begin));
 
 //            SortUtil.quickSort(tmpData, 0, tmpData.length - 1);
 //        Arrays.sort(tmpData);
 //            SortUtil.mergeSort(tmpData, 0, tmpData.length - 1, new int[tmpData.length]);
-            boolean resAssert = assertOrder(tmpData);
+            boolean resAssert = assertOrder(rawData);
 
             if (!resAssert) {
                 invalidCount++;
