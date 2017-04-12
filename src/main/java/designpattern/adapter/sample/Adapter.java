@@ -1,4 +1,4 @@
-package designpattern.adapter;
+package designpattern.adapter.sample;
 
 /**
  * 类适配器模式

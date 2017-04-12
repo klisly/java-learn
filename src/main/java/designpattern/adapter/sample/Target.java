@@ -1,4 +1,4 @@
-package designpattern.adapter;
+package designpattern.adapter.sample;
 
 /**
  * Created by wizardholy on 2017/4/5.

@@ -10,8 +10,8 @@ import java.util.Random;
 public class SortTest {
     static int[] rawData = null;
 
-    static int max = 200;
-    static int rawSize = 1000;
+    static int max = 10;
+    static int rawSize = 10;
     private static Random random = new Random();
     private static long begin;
     private static int[] nums;
@@ -19,7 +19,7 @@ public class SortTest {
 
     public static void main(String[] args) throws Exception {
         int invalidCount = 0;
-        int totalCount = 1000;
+        int totalCount = 1;
         for (int i = 0; i < totalCount; i++) {
 //            max = 1 + random.nextInt(21);
 //            rawSize = 1 + random.nextInt(10);
@@ -45,7 +45,8 @@ public class SortTest {
 //            SortUtil.bucketSort(rawData, max, 20);
 //            SortUtil.radixSort(rawData, 10, 6);
 //            SortUtil.radixSort(rawData, 10, 4);
-                SortUtil.countSort2(rawData);
+//                SortUtil.countSort2(rawData);
+                HeapSort.heapSort(rawData);
 //            tmpData = SortUtil.bitSort(tmpData);
 //            SortUtil.oddEvenSort(tmpData);
             log("sort:");
