@@ -20,6 +20,9 @@ public class CollectionsTest {
         //对集合进行排序
         Collections.sort(list);
         System.out.println("sort:" + list);
+        //对集合进行排序
+        Collections.rotate(list, -1);
+        System.out.println("rotate:" + list);
 
         //对集合进行随机排序
         Collections.shuffle(list);

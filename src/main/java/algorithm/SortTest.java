@@ -24,7 +24,7 @@ public class SortTest {
 //            max = 1 + random.nextInt(21);
 //            rawSize = 1 + random.nextInt(10);
             begin = System.currentTimeMillis();
-            generateArray();
+            rawData = generateArray(rawSize, max);
 //            log("gen cost " + (System.currentTimeMillis() - begin));
             begin = System.currentTimeMillis();
             int[] tmpData = new int[rawData.length];
@@ -82,7 +82,7 @@ public class SortTest {
 //        System.out.println("剩余空瓶子数：" + emptyNum);
     }
 
-    private static boolean assertOrder(int[] nums) {
+    public static boolean assertOrder(int[] nums) {
         if (nums.length > 2) {
             boolean hasOrder = true;
             for (int i = 0; i < nums.length - 1; i++) {
@@ -112,11 +112,12 @@ public class SortTest {
         }
     }
 
-    private static void generateArray() {
-        rawData = new int[rawSize];
+    public static int[] generateArray(int rawSize, int max) {
+        int[] rawData = new int[rawSize];
         for (int i = 0; i < rawSize; i++) {
             rawData[i] = random.nextInt(max);
         }
+        return rawData;
     }
 
     public static void log(String mesage) {
