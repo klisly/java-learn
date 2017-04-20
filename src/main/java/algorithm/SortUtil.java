@@ -728,4 +728,13 @@ public class SortUtil {
         }
         System.out.println();
     }
+
+    public static void out(float[] number) {
+        System.out.println();
+        for (int i = 0; i < number.length; i++) {
+            System.out.print(number[i]);
+            System.out.print("\t");
+        }
+        System.out.println();
+    }
 }
