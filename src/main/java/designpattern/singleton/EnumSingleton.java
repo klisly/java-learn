@@ -14,6 +14,7 @@ public class EnumSingleton {
         INSTANCE;
         private Resource instance;
         SomeThing() {
+            System.out.println("something construct");
             instance = new Resource();
         }
         public Resource getInstance() {
